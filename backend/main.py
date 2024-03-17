@@ -11,9 +11,18 @@ from azure.storage.blob import (
 )
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def create_user_delegation_sas_blob(
@@ -68,4 +77,4 @@ async def root():
     )
     sas_url = f"{blob_client.url}?{sas_token}"
 
-    return sas_url
+    return {"url": sas_url}
